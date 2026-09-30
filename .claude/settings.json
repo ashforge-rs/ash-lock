@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cargo info *)",
+      "Bash(apt-cache policy *)",
+      "Bash(sudo -n apt-get install -y protobuf-compiler)"
+    ]
+  }
+}

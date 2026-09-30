@@ -1,0 +1,52 @@
+[package]
+name = "ash-lock"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+authors = ["Giorgos Ntemiris <gntem@users.noreply.github.com>"]
+description = "Distributed coordination / locking for the ash-* ecosystem (etcd-backed; in-memory by default)"
+license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/ashforge-rs/ash-lock"
+keywords = ["lock", "distributed", "etcd", "coordination", "mutex"]
+categories = ["concurrency", "asynchronous"]
+
+# NOTE (prototype status):
+# The default build is single-process (InMemoryBackend). Real distributed
+# locking is provided by the `etcd` feature (EtcdBackend: etcd leases + txn,
+# revision-based fencing tokens). Some collaborators named in the original
+# spec are still stubbed:
+#   - ash-telemetry          -> replaced by an in-crate `telemetry` counter module
+#   - ash-discovery          -> LockClient::connect resolves seeds locally (no-op)
+# The real sibling crates that DO exist are wired behind opt-in features so the
+# default build never depends on their (heavier / pyo3) build graphs.
+
+[features]
+default = []
+# Real distributed locking over an etcd cluster.
+etcd = ["dep:etcd-client"]
+# Pull in the real ash-time Hybrid Logical Clock for stamping lock operations.
+ash-time = ["dep:ash-time"]
+# Pull in the real ash-flare supervision tree for the watchdog. Without it, the
+# watchdog uses an internal supervision shim with the same contract.
+ash-flare = ["dep:ash-flare"]
+# Pull in ash-rpc for the (still mock) remote lock backend transport.
+ash-rpc = ["dep:ash-rpc"]
+
+[dependencies]
+tokio = { version = "1.0", features = ["full"] }
+tracing = "0.1"
+thiserror = "2.0"          # matches ash-flare's 2.0 to keep one workspace consistent
+serde = { version = "1.0", features = ["derive"] }
+async-trait = "0.1"
+dashmap = "6.1"            # matches ash-flare's dashmap 6.1
+etcd-client = { version = "0.19", optional = true }
+
+# Optional real sibling crates (see [features] above).
+ash-time = { version = "1", optional = true }
+ash-flare = { version = "3", optional = true }
+ash-rpc = { version = "4.1", optional = true }
+
+[dev-dependencies]
+tokio = { version = "1.0", features = ["full", "test-util"] }
+tracing-subscriber = "0.3"
