@@ -40,7 +40,7 @@ thiserror = "2.0"          # matches ash-flare's 2.0 to keep one workspace consi
 serde = { version = "1.0", features = ["derive"] }
 async-trait = "0.1"
 dashmap = "6.1"            # matches ash-flare's dashmap 6.1
-etcd-client = { version = "0.19", optional = true }
+etcd-client = { version = "0.20", optional = true }
 
 # Optional real sibling crates (see [features] above).
 ash-time = { version = "1", optional = true }
