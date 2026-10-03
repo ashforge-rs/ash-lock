@@ -1,0 +1,45 @@
+[package]
+name = "ash-lock"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+authors = ["Giorgos Ntemiris <gntem@users.noreply.github.com>"]
+description = "Distributed coordination / locking for the ash-* ecosystem (etcd-backed; in-memory by default)"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/ashforge-rs/ash-lock"
+keywords = ["lock", "distributed", "etcd", "coordination", "mutex"]
+categories = ["concurrency", "asynchronous"]
+
+# NOTE (prototype status):
+# The default build is single-process (InMemoryBackend). Real distributed
+# locking is provided by the `etcd` feature (EtcdBackend: etcd leases + txn,
+# revision-based fencing tokens). Some collaborators named in the original
+# spec are still stubbed:
+#   - ash-telemetry          -> replaced by an in-crate `telemetry` counter module
+#   - ash-discovery          -> LockClient::connect resolves seeds locally (no-op)
+# The real sibling crates that DO exist are wired behind opt-in features so the
+# default build never depends on their (heavier / pyo3) build graphs.
+
+[features]
+default = []
+# Real distributed locking over an etcd cluster.
+etcd = ["dep:etcd-client"]
+# Pull in the real ash-time Hybrid Logical Clock for stamping lock operations.
+ash-time = ["dep:ash-time"]
+
+[dependencies]
+tokio = { version = "1.0", features = ["full"] }
+tracing = "0.1"
+thiserror = "2.0"
+serde = { version = "1.0", features = ["derive"] }
+async-trait = "0.1"
+dashmap = "6.1"
+etcd-client = { version = "0.19", optional = true }
+
+# Optional sibling crate (see [features] above).
+ash-time = { version = "1", optional = true }
+
+[dev-dependencies]
+tokio = { version = "1.0", features = ["full", "test-util"] }
+tracing-subscriber = "0.3"
