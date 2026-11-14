@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   types, so code that builds those values must use `etcd-client` 0.21 too.
 - Dependency updates: `tokio` 1.54.1.
 
+### Security
+
+- Locked `h2` 0.4.20 (RUSTSEC-2026-0258), `pulldown-cmark` 0.13.6
+  (RUSTSEC-2026-0414, RUSTSEC-2026-0433) and `rustix` 1.1.6 (RUSTSEC-2026-0486).
+
 ## [0.1.0] — 2026-10-03
 
 First release.
