@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-11-14
+
+### Changed
+
+- **Breaking:** the `etcd` feature now uses `etcd-client` 0.21 (was 0.19).
+  `EtcdBackend::connect` and `EtcdBackend::from_client` take `etcd_client`
+  types, so code that builds those values must use `etcd-client` 0.21 too.
+- Dependency updates: `tokio` 1.54.1.
+
 ## [0.1.0] — 2026-10-03
 
 First release.
